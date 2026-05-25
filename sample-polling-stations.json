@@ -1,0 +1,72 @@
+[
+  {
+    "name": "Kabwe Central Polling Station",
+    "province": "Central",
+    "constituency": "Kabwe",
+    "ward": "Lubemba",
+    "address": "123 Market Road"
+  },
+  {
+    "name": "Ndola Civic Center Polling Station",
+    "province": "Copperbelt",
+    "constituency": "Ndola Central",
+    "ward": "Mayeni",
+    "address": "45 Civic Drive"
+  },
+  {
+    "name": "Choma Girls School Polling Station",
+    "province": "Southern",
+    "constituency": "Choma",
+    "ward": "Kasisi",
+    "address": "12 School Lane"
+  },
+  {
+    "name": "Kanyama Health Post Polling Station",
+    "province": "Lusaka",
+    "constituency": "Kanyama",
+    "ward": "Garden",
+    "address": "88 Kanyama Road"
+  },
+  {
+    "name": "Chawama Clinic Polling Station",
+    "province": "Lusaka",
+    "constituency": "Matero",
+    "ward": "Kamwala",
+    "address": "27 Chawama Drive"
+  },
+  {
+    "name": "Solwezi Town Hall Polling Station",
+    "province": "North-Western",
+    "constituency": "Solwezi",
+    "ward": "Mushindamo",
+    "address": "9 Town Hall Road"
+  },
+  {
+    "name": "Petauke Town Hall Polling Station",
+    "province": "Eastern",
+    "constituency": "Petauke",
+    "ward": "Msoro",
+    "address": "34 Victoria Street"
+  },
+  {
+    "name": "Livingstone Civic Center Polling Station",
+    "province": "Southern",
+    "constituency": "Livingstone",
+    "ward": "Simonga",
+    "address": "6 Front Street"
+  },
+  {
+    "name": "Chipata Stadium Polling Station",
+    "province": "Eastern",
+    "constituency": "Chipata",
+    "ward": "Kaunda",
+    "address": "101 Stadium Avenue"
+  },
+  {
+    "name": "St. Mary's School Polling Station",
+    "province": "Lusaka",
+    "constituency": "Lusaka Central",
+    "ward": "Kabwa",
+    "address": "3 School Lane"
+  }
+]

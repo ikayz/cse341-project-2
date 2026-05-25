@@ -1,0 +1,112 @@
+[
+  {
+    "firstName": "Isaac",
+    "lastName": "Miti",
+    "nationalID": "1234567890123456",
+    "dateOfBirth": "1990-07-12",
+    "gender": "male",
+    "province": "Lusaka",
+    "constituency": "Lusaka Central",
+    "ward": "Kabwa",
+    "pollingStation": "St. Mary's School"
+  },
+  {
+    "firstName": "Zaina",
+    "lastName": "Phiri",
+    "nationalID": "2345678901234567",
+    "dateOfBirth": "1984-05-21",
+    "gender": "female",
+    "province": "Copperbelt",
+    "constituency": "Ndola Central",
+    "ward": "Mayeni",
+    "pollingStation": "Ndola Civic Center"
+  },
+  {
+    "firstName": "Kofi",
+    "lastName": "Chanda",
+    "nationalID": "3456789012345678",
+    "dateOfBirth": "1978-11-03",
+    "gender": "male",
+    "province": "Eastern",
+    "constituency": "Chipata",
+    "ward": "Kaunda",
+    "pollingStation": "Chipata Stadium"
+  },
+  {
+    "firstName": "Miriam",
+    "lastName": "Banda",
+    "nationalID": "4567890123456789",
+    "dateOfBirth": "1995-03-14",
+    "gender": "female",
+    "province": "Southern",
+    "constituency": "Choma",
+    "ward": "Kasisi",
+    "pollingStation": "Choma Girls High School"
+  },
+  {
+    "firstName": "Brian",
+    "lastName": "Lungu",
+    "nationalID": "5678901234567890",
+    "dateOfBirth": "1988-09-25",
+    "gender": "male",
+    "province": "Lusaka",
+    "constituency": "Kanyama",
+    "ward": "Garden",
+    "pollingStation": "Kanyama Health Post"
+  },
+  {
+    "firstName": "Grace",
+    "lastName": "Mwansa",
+    "nationalID": "6789012345678901",
+    "dateOfBirth": "2000-01-30",
+    "gender": "female",
+    "province": "Lusaka",
+    "constituency": "Matero",
+    "ward": "Kamwala",
+    "pollingStation": "Chawama Clinic"
+  },
+  {
+    "firstName": "Samuel",
+    "lastName": "Phiri",
+    "nationalID": "7890123456789012",
+    "dateOfBirth": "1982-12-09",
+    "gender": "male",
+    "province": "North-Western",
+    "constituency": "Solwezi",
+    "ward": "Mushindamo",
+    "pollingStation": "Solwezi Town Hall"
+  },
+  {
+    "firstName": "Ruth",
+    "lastName": "Nkhoma",
+    "nationalID": "8901234567890123",
+    "dateOfBirth": "1993-04-18",
+    "gender": "female",
+    "province": "Central",
+    "constituency": "Kabwe",
+    "ward": "Lubemba",
+    "pollingStation": "Kabwe Showgrounds"
+  },
+  {
+    "firstName": "Peter",
+    "lastName": "Kalumba",
+    "nationalID": "9012345678901234",
+    "dateOfBirth": "1986-06-10",
+    "gender": "male",
+    "province": "Southern",
+    "constituency": "Livingstone",
+    "ward": "Simonga",
+    "pollingStation": "Livingstone Civic Center"
+  },
+  {
+    "firstName": "Linda",
+    "lastName": "Chibale",
+    "nationalID": "0123456789012345",
+    "dateOfBirth": "1998-02-02",
+    "gender": "female",
+    "province": "Eastern",
+    "constituency": "Petauke",
+    "ward": "Msoro",
+    "pollingStation": "Petauke Town Hall"
+  }
+]

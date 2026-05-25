@@ -1,0 +1,418 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Zambia Voters API",
+    "version": "1.0.0",
+    "description": "CRUD API for voter registration data with validation and error handling."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api",
+      "description": "Local development server"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "VoterCreate": {
+        "type": "object",
+        "properties": {
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" },
+          "nationalID": { "type": "string" },
+          "dateOfBirth": { "type": "string", "format": "date" },
+          "gender": { "type": "string", "enum": ["male", "female", "other"] },
+          "province": { "type": "string" },
+          "constituency": { "type": "string" },
+          "ward": { "type": "string" },
+          "pollingStation": { "type": "string" }
+        },
+        "required": [
+          "firstName",
+          "lastName",
+          "nationalID",
+          "dateOfBirth",
+          "gender",
+          "province",
+          "constituency",
+          "ward",
+          "pollingStation"
+        ]
+      },
+      "Voter": {
+        "allOf": [
+          { "$ref": "#/components/schemas/VoterCreate" },
+          {
+            "type": "object",
+            "properties": {
+              "_id": { "type": "string", "readOnly": true }
+            }
+          }
+        ]
+      },
+      "PollingStationCreate": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "province": { "type": "string" },
+          "constituency": { "type": "string" },
+          "ward": { "type": "string" },
+          "address": { "type": "string" }
+        },
+        "required": ["name", "province", "constituency", "ward", "address"]
+      },
+      "PollingStation": {
+        "allOf": [
+          { "$ref": "#/components/schemas/PollingStationCreate" },
+          {
+            "type": "object",
+            "properties": {
+              "_id": { "type": "string", "readOnly": true }
+            }
+          }
+        ]
+      },
+      "ErrorResponse": {
+        "allOf": [
+          { "$ref": "#/components/schemas/VoterCreate" },
+          {
+            "type": "object",
+            "properties": {
+              "_id": { "type": "string", "readOnly": true }
+            }
+          }
+        ]
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": { "error": { "type": "string" } }
+      }
+    }
+  },
+  "paths": {
+    "/voters": {
+      "get": {
+        "tags": ["Voters"],
+        "summary": "Get all voters",
+        "responses": {
+          "200": {
+            "description": "A list of voters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Voter" }
+                },
+                "examples": {
+                  "sampleList": {
+                    "summary": "A sample voter list",
+                    "value": [
+                      {
+                        "firstName": "Isaac",
+                        "lastName": "Miti",
+                        "nationalID": "1234567890123456",
+                        "dateOfBirth": "1990-07-12",
+                        "gender": "male",
+                        "province": "Lusaka",
+                        "constituency": "Lusaka Central",
+                        "ward": "Kabwa",
+                        "pollingStation": "St. Mary's School"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Voters"],
+        "summary": "Create a new voter",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/VoterCreate" },
+              "example": {
+                "firstName": "Isaac",
+                "lastName": "Miti",
+                "nationalID": "1234567890123456",
+                "dateOfBirth": "1990-07-12",
+                "gender": "male",
+                "province": "Lusaka",
+                "constituency": "Lusaka Central",
+                "ward": "Kabwa",
+                "pollingStation": "St. Mary's School"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Voter created" },
+          "400": { "description": "Validation error" },
+          "409": { "description": "Duplicate nationalID" }
+        }
+      }
+    },
+    "/pollingStations": {
+      "get": {
+        "tags": ["PollingStations"],
+        "summary": "Get all polling stations",
+        "responses": {
+          "200": {
+            "description": "A list of polling stations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/PollingStation" }
+                },
+                "examples": {
+                  "sampleList": {
+                    "summary": "A sample polling station list",
+                    "value": [
+                      {
+                        "name": "Center Station A",
+                        "province": "Lusaka",
+                        "constituency": "Lusaka Central",
+                        "ward": "Kabwe",
+                        "address": "123 Market Road"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["PollingStations"],
+        "summary": "Create a new polling station",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/PollingStationCreate" },
+              "example": {
+                "name": "Center Station A",
+                "province": "Lusaka",
+                "constituency": "Lusaka Central",
+                "ward": "Kabwe",
+                "address": "123 Market Road"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Polling station created" },
+          "400": { "description": "Validation error" }
+        }
+      }
+    },
+    "/pollingStations/{id}": {
+      "get": {
+        "tags": ["PollingStations"],
+        "summary": "Get a polling station by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "6472c1f9b2ef2b7a6f8d3a54"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Polling station data",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PollingStation" },
+                "example": {
+                  "name": "Center Station A",
+                  "province": "Lusaka",
+                  "constituency": "Lusaka Central",
+                  "ward": "Kabwe",
+                  "address": "123 Market Road"
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid ID" },
+          "404": { "description": "Polling station not found" }
+        }
+      },
+      "put": {
+        "tags": ["PollingStations"],
+        "summary": "Update a polling station by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "6472c1f9b2ef2b7a6f8d3a54"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "province": { "type": "string" },
+                  "constituency": { "type": "string" },
+                  "ward": { "type": "string" },
+                  "address": { "type": "string" }
+                }
+              },
+              "example": {
+                "name": "Center Station B",
+                "province": "Copperbelt",
+                "constituency": "Ndola Central",
+                "ward": "Mayeni",
+                "address": "456 Civic Road"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Updated polling station" },
+          "400": { "description": "Validation error or invalid ID" },
+          "404": { "description": "Polling station not found" }
+        }
+      },
+      "delete": {
+        "tags": ["PollingStations"],
+        "summary": "Delete a polling station by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "6472c1f9b2ef2b7a6f8d3a54"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Delete confirmation" },
+          "400": { "description": "Invalid ID" },
+          "404": { "description": "Polling station not found" }
+        }
+      }
+    },
+    "/voters/{id}": {
+      "get": {
+        "tags": ["Voters"],
+        "summary": "Get a voter by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "6472c1f9b2ef2b7a6f8d3a54"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Voter data",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Voter" },
+                "example": {
+                  "firstName": "Zaina",
+                  "lastName": "Phiri",
+                  "nationalID": "2345678901234567",
+                  "dateOfBirth": "1984-05-21",
+                  "gender": "female",
+                  "province": "Copperbelt",
+                  "constituency": "Ndola Central",
+                  "ward": "Mayeni",
+                  "pollingStation": "Ndola Civic Center"
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid ID" },
+          "404": { "description": "Voter not found" }
+        }
+      },
+      "put": {
+        "tags": ["Voters"],
+        "summary": "Update a voter by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "6472c1f9b2ef2b7a6f8d3a54"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "province": { "type": "string" },
+                  "ward": { "type": "string" },
+                  "pollingStation": { "type": "string" }
+                }
+              },
+              "example": {
+                "province": "Copperbelt",
+                "ward": "Mayeni",
+                "pollingStation": "Ndola Civic Center"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Updated voter" },
+          "400": { "description": "Validation error or invalid ID" },
+          "404": { "description": "Voter not found" }
+        }
+      },
+      "delete": {
+        "tags": ["Voters"],
+        "summary": "Delete a voter by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "6472c1f9b2ef2b7a6f8d3a54"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Delete confirmation" },
+          "400": { "description": "Invalid ID" },
+          "404": { "description": "Voter not found" }
+        }
+      }
+    }
+  }
+}
