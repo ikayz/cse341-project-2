@@ -35,7 +35,18 @@ app.get('/swagger.json', (req, res) => {
 app.use('/api-docs', ...swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.get('/', (req, res) => {
-  res.send('API is running...');
+  const baseUrl = `${req.protocol}://${req.get('host')}`;
+  res.send(`
+    <h1>Zambia Voters API</h1>
+    <p>The API is running. Use the links below to access documentation and endpoints:</p>
+    <ul>
+      <li><a href="${baseUrl}/api-docs">Swagger UI Docs</a></li>
+      <li><a href="${baseUrl}/swagger.json">Swagger JSON</a></li>
+      <li><a href="${baseUrl}/api/voters">GET /api/voters</a></li>
+      <li><a href="${baseUrl}/api/pollingStations">GET /api/pollingStations</a></li>
+    </ul>
+    <p>Use these endpoints in your API client or browser.</p>
+  `);
 });
 
 const port = process.env.PORT || 3000;
