@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const path = require('path');
 const swaggerUi = require('swagger-ui-express');
 const votersRouter = require('./routes/voters');
@@ -9,6 +10,7 @@ const swaggerDocument = require('./swagger.json');
 require('dotenv').config();
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 const mongoUri = process.env.MONGODB_URI || process.env.MONGO_URI;
