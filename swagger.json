@@ -7,11 +7,32 @@
   },
   "servers": [
     {
-      "url": "/api",
-      "description": "Current server base path"
+      "url": "/",
+      "description": "Current server"
     }
   ],
   "components": {
+    "securitySchemes": {
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "connect.sid",
+        "description": "Session cookie created after logging in with GitHub OAuth at /auth/github."
+      },
+      "githubOAuth": {
+        "type": "oauth2",
+        "description": "GitHub OAuth login is handled through /auth/github and stores the authenticated session in a secure cookie.",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://github.com/login/oauth/authorize",
+            "tokenUrl": "https://github.com/login/oauth/access_token",
+            "scopes": {
+              "user:email": "Read the user's GitHub email addresses"
+            }
+          }
+        }
+      }
+    },
     "schemas": {
       "VoterCreate": {
         "type": "object",
@@ -85,11 +106,101 @@
       "ErrorResponse": {
         "type": "object",
         "properties": { "error": { "type": "string" } }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "displayName": { "type": "string" },
+          "username": { "type": "string" },
+          "email": { "type": "string" },
+          "photo": { "type": "string" },
+          "provider": { "type": "string", "example": "github" }
+        }
+      },
+      "AuthStatus": {
+        "type": "object",
+        "properties": {
+          "authenticated": { "type": "boolean" },
+          "user": {
+            "oneOf": [
+              { "$ref": "#/components/schemas/User" },
+              { "type": "null" }
+            ]
+          }
+        }
       }
     }
   },
   "paths": {
-    "/voters": {
+    "/auth/github": {
+      "get": {
+        "tags": ["Authentication"],
+        "summary": "Start GitHub OAuth login",
+        "description": "Redirects the browser to GitHub. On first successful login, the API creates a user account from the GitHub profile.",
+        "responses": {
+          "302": { "description": "Redirect to GitHub OAuth authorization screen" },
+          "503": { "description": "GitHub OAuth environment variables are not configured" }
+        }
+      }
+    },
+    "/auth/github/callback": {
+      "get": {
+        "tags": ["Authentication"],
+        "summary": "GitHub OAuth callback",
+        "description": "GitHub redirects here after login. A successful callback creates an authenticated session cookie.",
+        "responses": {
+          "302": { "description": "Redirect to authenticated profile or login failure route" },
+          "503": { "description": "GitHub OAuth environment variables are not configured" }
+        }
+      }
+    },
+    "/auth/status": {
+      "get": {
+        "tags": ["Authentication"],
+        "summary": "Check current login status",
+        "responses": {
+          "200": {
+            "description": "Authentication status",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AuthStatus" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/profile": {
+      "get": {
+        "tags": ["Authentication"],
+        "summary": "Get the logged-in user's profile",
+        "security": [{ "cookieAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Authenticated user profile",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/User" }
+              }
+            }
+          },
+          "401": { "description": "Authentication required" }
+        }
+      }
+    },
+    "/auth/logout": {
+      "get": {
+        "tags": ["Authentication"],
+        "summary": "Log out the current user",
+        "security": [{ "cookieAuth": [] }],
+        "responses": {
+          "200": { "description": "Logout confirmation" },
+          "500": { "description": "Server error" }
+        }
+      }
+    },
+    "/api/voters": {
       "get": {
         "tags": ["Voters"],
         "summary": "Get all voters",
@@ -136,6 +247,7 @@
       "post": {
         "tags": ["Voters"],
         "summary": "Create a new voter",
+        "security": [{ "cookieAuth": [] }],
         "requestBody": {
           "required": true,
           "content": {
@@ -158,11 +270,12 @@
         "responses": {
           "201": { "description": "Voter created" },
           "400": { "description": "Validation error" },
+          "401": { "description": "Authentication required" },
           "409": { "description": "Duplicate nationalID" }
         }
       }
     },
-    "/pollingStations": {
+    "/api/pollingStations": {
       "get": {
         "tags": ["PollingStations"],
         "summary": "Get all polling stations",
@@ -205,6 +318,7 @@
       "post": {
         "tags": ["PollingStations"],
         "summary": "Create a new polling station",
+        "security": [{ "cookieAuth": [] }],
         "requestBody": {
           "required": true,
           "content": {
@@ -222,11 +336,12 @@
         },
         "responses": {
           "201": { "description": "Polling station created" },
-          "400": { "description": "Validation error" }
+          "400": { "description": "Validation error" },
+          "401": { "description": "Authentication required" }
         }
       }
     },
-    "/pollingStations/{id}": {
+    "/api/pollingStations/{id}": {
       "get": {
         "tags": ["PollingStations"],
         "summary": "Get a polling station by ID",
@@ -262,6 +377,7 @@
       "put": {
         "tags": ["PollingStations"],
         "summary": "Update a polling station by ID",
+        "security": [{ "cookieAuth": [] }],
         "parameters": [
           {
             "name": "id",
@@ -298,12 +414,14 @@
         "responses": {
           "200": { "description": "Updated polling station" },
           "400": { "description": "Validation error or invalid ID" },
+          "401": { "description": "Authentication required" },
           "404": { "description": "Polling station not found" }
         }
       },
       "delete": {
         "tags": ["PollingStations"],
         "summary": "Delete a polling station by ID",
+        "security": [{ "cookieAuth": [] }],
         "parameters": [
           {
             "name": "id",
@@ -316,11 +434,12 @@
         "responses": {
           "200": { "description": "Delete confirmation" },
           "400": { "description": "Invalid ID" },
+          "401": { "description": "Authentication required" },
           "404": { "description": "Polling station not found" }
         }
       }
     },
-    "/voters/{id}": {
+    "/api/voters/{id}": {
       "get": {
         "tags": ["Voters"],
         "summary": "Get a voter by ID",
@@ -360,6 +479,7 @@
       "put": {
         "tags": ["Voters"],
         "summary": "Update a voter by ID",
+        "security": [{ "cookieAuth": [] }],
         "parameters": [
           {
             "name": "id",
@@ -392,12 +512,14 @@
         "responses": {
           "200": { "description": "Updated voter" },
           "400": { "description": "Validation error or invalid ID" },
+          "401": { "description": "Authentication required" },
           "404": { "description": "Voter not found" }
         }
       },
       "delete": {
         "tags": ["Voters"],
         "summary": "Delete a voter by ID",
+        "security": [{ "cookieAuth": [] }],
         "parameters": [
           {
             "name": "id",
@@ -410,6 +532,7 @@
         "responses": {
           "200": { "description": "Delete confirmation" },
           "400": { "description": "Invalid ID" },
+          "401": { "description": "Authentication required" },
           "404": { "description": "Voter not found" }
         }
       }
